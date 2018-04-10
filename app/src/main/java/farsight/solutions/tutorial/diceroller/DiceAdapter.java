@@ -53,10 +53,11 @@ public class DiceAdapter extends ArrayAdapter<Dice> {
         //change background button text depending on hold state
         if(dice.hold) {
             convertView.setBackgroundColor(Color.LTGRAY);
-            holdButton.setText("UNHOLD");
+
+            holdButton.setText(getContext().getResources().getString(R.string.hold_button_unhold_label));
         } else {
             convertView.setBackgroundColor(Color.WHITE);
-            holdButton.setText("HOLD");
+            holdButton.setText(getContext().getResources().getString(R.string.hold_button_hold_label));
         }
 
         //setup dice change button
