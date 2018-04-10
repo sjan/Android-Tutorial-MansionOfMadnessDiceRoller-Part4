@@ -14,8 +14,11 @@ import java.util.List;
 
 
 public class DiceAdapter extends ArrayAdapter<Dice> {
+    MainActivity activity;
+
     public DiceAdapter(@NonNull Context context, int resource, List<Dice> list) {
         super(context, resource, list);
+        activity = (MainActivity) context;
     }
 
     @Override
@@ -53,7 +56,6 @@ public class DiceAdapter extends ArrayAdapter<Dice> {
         //change background button text depending on hold state
         if(dice.hold) {
             convertView.setBackgroundColor(Color.LTGRAY);
-
             holdButton.setText(getContext().getResources().getString(R.string.hold_button_unhold_label));
         } else {
             convertView.setBackgroundColor(Color.WHITE);
@@ -68,6 +70,7 @@ public class DiceAdapter extends ArrayAdapter<Dice> {
                 Dice dice = getItem(position);
                 dice.nextValue();
                 notifyDataSetChanged();
+                activity.updateDiceCount();
             }
         });
 
