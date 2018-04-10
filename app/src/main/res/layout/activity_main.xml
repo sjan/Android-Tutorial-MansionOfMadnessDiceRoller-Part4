@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,37 +20,133 @@
     <LinearLayout
         android:id="@+id/button_bar"
         android:layout_width="match_parent"
+        android:orientation="vertical"
         android:layout_height="@dimen/control_bar_height"
-        android:orientation="horizontal"
-        android:weightSum="3"
+        android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dice_list">
-        <Button
-            android:id="@+id/add_dice_button"
-            android:layout_gravity = "center"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_button_label"
-            android:onClick="addDice"/>
-        <Button
-            android:id="@+id/rem_dice_button"
-            android:layout_gravity = "center"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rem_button_label"
-            android:onClick="removeDice"/>
-        <Button
-            android:id="@+id/roll_dice_button"
-            android:layout_weight="1"
-            android:layout_gravity = "center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/roll_button_label"
-            android:onClick="rollDice"/>
-    </LinearLayout>
 
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/control_bar_line_height"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:baselineAligned="false">
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dice_padding"
+                    android:layout_gravity = "center"
+                    android:src="@drawable/star"/>
+                <TextView
+                    android:id="@+id/star_count"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    />
+             </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/dice_padding"
+                    android:src="@drawable/magnifying_glass"/>
+                <TextView
+                    android:id="@+id/mag_count"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity = "center"
+                    android:padding="@dimen/dice_padding"
+                    android:src="@drawable/blank_dice"/>
+                <TextView
+                    android:id="@+id/blank_count"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_gravity = "center"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/total_label"
+                    />
+                <TextView
+                    android:id="@+id/total_count"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_gravity = "center"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/control_bar_line_height"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            >
+            <Button
+                android:id="@+id/add_dice_button"
+                android:layout_gravity = "center"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_button_label"
+                android:onClick="addDice"/>
+            <Button
+                android:id="@+id/rem_dice_button"
+                android:layout_gravity = "center"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rem_button_label"
+                android:onClick="removeDice"/>
+            <Button
+                android:id="@+id/roll_dice_button"
+                android:layout_weight="1"
+                android:layout_gravity = "center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/roll_button_label"
+                android:onClick="rollDice"/>
+        </LinearLayout>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
