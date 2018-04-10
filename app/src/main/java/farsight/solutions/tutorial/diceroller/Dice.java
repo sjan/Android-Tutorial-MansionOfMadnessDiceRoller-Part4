@@ -3,7 +3,6 @@ package farsight.solutions.tutorial.diceroller;
 import java.util.Random;
 
 public class Dice {
-    public static int SIDES = 8;
     public enum Face {
         BLANK,
         MAGNIFY,

@@ -1,6 +1,7 @@
 package farsight.solutions.tutorial.diceroller;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.List;
+
 
 public class DiceAdapter extends ArrayAdapter<Dice> {
     public DiceAdapter(@NonNull Context context, int resource, List<Dice> list) {
@@ -44,8 +46,18 @@ public class DiceAdapter extends ArrayAdapter<Dice> {
             public void onClick(View v) {
                 Dice dice = getItem(position);
                 dice.toggleHold();
+                notifyDataSetChanged();
             }
         });
+
+        //change background button text depending on hold state
+        if(dice.hold) {
+            convertView.setBackgroundColor(Color.LTGRAY);
+            holdButton.setText("UNHOLD");
+        } else {
+            convertView.setBackgroundColor(Color.WHITE);
+            holdButton.setText("HOLD");
+        }
 
         //setup dice change button
         Button changeButton = convertView.findViewById(R.id.dice_change_button);
