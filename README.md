@@ -414,3 +414,7 @@ The current 'Roll' button logic goes through all the dice and sets new values fo
         return FULL_REVOLUTION + random.nextInt(THREE_REVOLUTION);
     }
     ....
+
+Screenshot
+=================
+![Screenshot](./images/screenshot03.png)
