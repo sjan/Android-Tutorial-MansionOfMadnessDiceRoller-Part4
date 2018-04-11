@@ -1,18 +1,18 @@
 Android App - Mansions of Madness Dice - Part2
 =======================================
-In part 2 of this tutorial we put on our user design hats and try to improve the app.
+In part 2 of this tutorial we put on our user experience hats on and address usability issues.
 
 New Requirements
 =============
-The initial design covered the basic mansions of madness dice roll function. But the problem is that the app isn't very user friendly:
+In part one, we put together an app that covered the basic Mansions of Madness dice roll function. However, the app isn't very user friendly:
 
-* A user needs to scroll through the entire dice list to count dice. Manually counting dice is pretty cumbersome.
-* If a player sets a dice to 'hold', the app doesn't show any visual cue. It's really easy to lose track of what's held and what's not held.
+* For each roll, a user needs to scroll through the entire list and count dice. Manually counting dice is pretty cumbersome.
+* A User can't tell if a dice is set to 'hold'. Without any visual cue, it's really easy to lose track of which dice is held and unheld.
 * When a player triggers a roll, the dice face just changes or remains the same. This can be especially confusing if say there was only 1 dice and the player rolls the same value as before.
 
-To tackle the above issues, I've come up with a couple ideas.
+To tackle the above issues:
 * Expand the bottom area with a dice count widget.
-* Tapping 'hold' changes the row background. The 'hold' text changes to 'unhold'.
+* Tapping 'hold' changes the row background color and button text.
 * Tapping 'roll' triggers an animation. The animation will be a dice spin. Each dice will spin between 1 and 3 seconds and between 1 and 3 revolutions.
 
 Design
@@ -22,19 +22,18 @@ Design
 Implementation Steps
 ======================
 
-1.  Refactoring into separate classes for better organization
-2.  Adding a Dice summary
-3.  Setting row background grey when Dice is in 'HELD' state
-4.  Rotation dice on roll
-5.  Populating Dice count into summary
+1.  Refactor Inner classes into outer classes for better organization.
+2.  Add Dice summary.
+3.  Populate Dice count into summary
+4.  Set row background grey when Dice is in 'HELD' state.
+5.  Spin dice on roll with animation
 
 Step 1 : Refactor
 ==================
-Currently, all the app logic sits in one class ````MainActivity.java````. As we add more logic, things can get pretty messy and difficult to read. As a first step, I'm splitting out the inner classes into top level classes ````Dice```` and ````DiceAdapter````.
-
-Migrating the ````Dice```` class from an inner class to a Top level class incurred no changes.
+Currently, all the app logic sits in one class ````MainActivity.java````. As we add more features, the Code will get pretty messy and difficult to read with everything  in one place. As a first step, we split out the inner classes into top level classes ````Dice```` and ````DiceAdapter````.
 
     Dice.java
+
     public class Dice {
         public enum Face {
             BLANK,
@@ -76,10 +75,8 @@ Migrating the ````Dice```` class from an inner class to a Top level class incurr
         }
     }
 
-
-The DiceAdapter needed some refactoring as in the original version directly referenced the activity object.
-
     DiceAdapter.java
+
     public class DiceAdapter extends ArrayAdapter<Dice> {
 
         public DiceAdapter(@NonNull Context context, int resource, List<Dice> list) {
@@ -133,32 +130,43 @@ The DiceAdapter needed some refactoring as in the original version directly refe
         }
     }
 
-Step 2 : Dice summary Layout
+Step 2 : Dice Summary Layout
 =======================
-The Dice summary layout consists of blank count/label, star count/label, magnifying glass count/label, total count.
+The Summary Widget is a 4 column layout position between the dice area and control area. Each column included blank dice count/label, star count/label, magnifying glass count/label, and total count.
 
-![MoM Dice](./images/blueprint_design_pt2.png)
+![Blueprint](./images/blueprint_design_pt2.png)
 
     activity_main.xml
-    ....
-    <LinearLayout
-        android:id="@+id/button_bar"
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="@dimen/control_bar_height"
-        android:weightSum="2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dice_list">
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <ListView
+            android:id="@+id/dice_list"
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            app:layout_constraintBottom_toTopOf="@id/dice_summary"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </ListView>
 
         <LinearLayout
-            android:layout_weight="1"
+            android:id="@+id/dice_summary"
             android:layout_width="match_parent"
             android:layout_height="@dimen/control_bar_line_height"
             android:orientation="horizontal"
             android:weightSum="4"
-            android:baselineAligned="false">
+            app:layout_constraintBottom_toTopOf="@id/button_bar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dice_list">
             <LinearLayout
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
@@ -172,11 +180,11 @@ The Dice summary layout consists of blank count/label, star count/label, magnify
                     android:src="@drawable/star"/>
                 <TextView
                     android:id="@+id/star_count"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
                     android:layout_gravity="center"
-                    android:layout_height="wrap_content"/>
-             </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="count"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_height="match_parent"
@@ -191,10 +199,10 @@ The Dice summary layout consists of blank count/label, star count/label, magnify
                     android:src="@drawable/magnifying_glass"/>
                 <TextView
                     android:id="@+id/mag_count"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
                     android:layout_gravity="center"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="count"/>
             </LinearLayout>
 
             <LinearLayout
@@ -210,10 +218,10 @@ The Dice summary layout consists of blank count/label, star count/label, magnify
                     android:src="@drawable/blank_dice"/>
                 <TextView
                     android:id="@+id/blank_count"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_gravity = "center"
-                    android:layout_height="wrap_content"/>
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="count"/>
             </LinearLayout>
 
             <LinearLayout
@@ -228,19 +236,24 @@ The Dice summary layout consists of blank count/label, star count/label, magnify
                     android:text="@string/total_label"/>
                 <TextView
                     android:id="@+id/total_count"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_gravity = "center"
-                    android:layout_height="wrap_content"/>
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="count"/>
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/button_bar"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/control_bar_line_height"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dice_summary">
             <Button
                 android:id="@+id/add_dice_button"
                 android:layout_gravity = "center"
@@ -266,37 +279,95 @@ The Dice summary layout consists of blank count/label, star count/label, magnify
                 android:text="@string/roll_button_label"
                 android:onClick="rollDice"/>
         </LinearLayout>
-    </LinearLayout>
-    ....
 
-![MoM Dice](./images/screenshot03.png)
+    </android.support.constraint.ConstraintLayout>
 
-
-Step 3: Hold Button Triggers Background Change
+Step 3: Populate Dice Count into Widget
 ==============================================
 
-To implement this feature, we add a bit of logic in the DiceAdapter. If the ````Dice.hold```` is true, then background color should be light grey, otherwise we set it white. We also set the text to "HOLD" or "UNHOLD"
+Next, we populate the widget with dice counts. We add 2 methods to ````MainActivity.java````.  ````updateDiceCount```` populates the values into the TextView and ````countDice```` counts the dice. Every time we change dice values such as ````MainActivity.rollDice```` and ````changeButton.onClick```` we update the dice count.
 
-    DiceAdapter.java
+    MainActivity.java
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    ....
 
-       ....
-       //change background button text depending on hold state
-       if(dice.hold) {
-           convertView.setBackgroundColor(Color.LTGRAY);
-           holdButton.setText(getContext().getResources().getString(R.string.hold_button_unhold_label));
-       } else {
-           convertView.setBackgroundColor(Color.WHITE);
-           holdButton.setText(getContext().getResources().getString(R.string.hold_button_hold_label));
-       }
-       ....
+    public void updateDiceCount() {
+        TextView totalCount = findViewById(R.id.total_count);
+        totalCount.setText(Integer.toString(diceList.size()));
+
+        TextView blankCount = findViewById(R.id.blank_count);
+        blankCount.setText(Integer.toString(countDice(BLANK)));
+
+        TextView magCount = findViewById(R.id.mag_count);
+        magCount.setText(Integer.toString(countDice(MAGNIFY)));
+
+        TextView starCount = findViewById(R.id.star_count);
+        starCount.setText(Integer.toString(countDice(STAR)));
+
     }
 
-Step 4: Dice Rotation
+    private int countDice(Dice.Face type) {
+        int count =0;
+        for(Dice dice : diceList) {
+           if(dice.diceVal == type) {
+               count++;
+           }
+        }
+        return count;
+    }
+    ....
+
+Now that the ````DiceAdapter```` is in an outer class, we need a reference to the activity object from the adapter.
+
+    public class DiceAdapter extends ArrayAdapter<Dice> {
+        MainActivity activity;
+
+        public DiceAdapter(@NonNull Context context, int resource, List<Dice> list) {
+            super(context, resource, list);
+            activity = (MainActivity) context;
+        }
+    ....
+    //setup dice change button
+       Button changeButton = convertView.findViewById(R.id.dice_change_button);
+       changeButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Dice dice = getItem(position);
+               dice.nextValue();
+               notifyDataSetChanged();
+               activity.updateDiceCount();
+           }
+       });
+    ....
+
+
+
+Step 4: Hold Button Triggers Background Change
+==============================================
+
+Currently, the hold button triggers a state change in the dice object. For this feature we modify the adapter render logic to set row background color depending on the dice hold state. If the ````Dice.hold```` is true, then background color should be light grey, otherwise we set it white. We also set the text to "HOLD" or "UNHOLD"
+
+        DiceAdapter.java
+
+        ....
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+           ....
+           //change background button text depending on hold state
+           if(dice.hold) {
+               convertView.setBackgroundColor(Color.LTGRAY);
+               holdButton.setText(getContext().getResources().getString(R.string.hold_button_unhold_label));
+           } else {
+               convertView.setBackgroundColor(Color.WHITE);
+               holdButton.setText(getContext().getResources().getString(R.string.hold_button_hold_label));
+           }
+           ....
+        }
+
+Step 5: Dice Spin
 =====================
-The current 'Roll' button logic goes through all the dice and sets new values for each. To add dice animation, we'll need to get the corresponding Dice View and trigger some animation on it.
+The current 'Roll' button logic goes through all the dice and sets new values for each. To add dice animation, we get the corresponding ImageView and apply a [````RotationAnimation````](https://developer.android.com/reference/android/view/animation/RotateAnimation.html).
 
     MainActivity.java
     ....
@@ -343,32 +414,3 @@ The current 'Roll' button logic goes through all the dice and sets new values fo
         return FULL_REVOLUTION + random.nextInt(THREE_REVOLUTION);
     }
     ....
-
-Step 5: Populating Dice Count into Widget
-=========================================
-
-
-    public void updateDiceCount() {
-        TextView totalCount = findViewById(R.id.total_count);
-        totalCount.setText(Integer.toString(diceList.size()));
-
-        TextView blankCount = findViewById(R.id.blank_count);
-        blankCount.setText(Integer.toString(countDice(BLANK)));
-
-        TextView magCount = findViewById(R.id.mag_count);
-        magCount.setText(Integer.toString(countDice(MAGNIFY)));
-
-        TextView starCount = findViewById(R.id.star_count);
-        starCount.setText(Integer.toString(countDice(STAR)));
-
-    }
-
-    private int countDice(Dice.Face type) {
-        int count =0;
-        for(Dice dice : diceList) {
-           if(dice.diceVal == type) {
-               count++;
-           }
-        }
-        return count;
-    }
