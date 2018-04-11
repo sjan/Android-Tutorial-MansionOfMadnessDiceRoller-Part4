@@ -117,8 +117,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dice_summary"
-        >
+        app:layout_constraintTop_toBottomOf="@id/dice_summary">
         <Button
             android:id="@+id/add_dice_button"
             android:layout_gravity = "center"
@@ -126,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_button_label"
-            android:onClick="addDice"/>
+            android:onClick="onClickAddButton"/>
         <Button
             android:id="@+id/rem_dice_button"
             android:layout_gravity = "center"
@@ -134,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rem_button_label"
-            android:onClick="removeDice"/>
+            android:onClick="onClickRemoveButton"/>
         <Button
             android:id="@+id/roll_dice_button"
             android:layout_weight="1"
@@ -142,7 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/roll_button_label"
-            android:onClick="rollDice"/>
+            android:onClick="onClickRollButton"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

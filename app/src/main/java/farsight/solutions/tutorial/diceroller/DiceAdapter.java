@@ -47,9 +47,7 @@ public class DiceAdapter extends ArrayAdapter<Dice> {
         holdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dice dice = getItem(position);
-                dice.toggleHold();
-                notifyDataSetChanged();
+                activity.onClickHoldButton(position);
             }
         });
 
@@ -67,10 +65,7 @@ public class DiceAdapter extends ArrayAdapter<Dice> {
         changeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dice dice = getItem(position);
-                dice.nextValue();
-                notifyDataSetChanged();
-                activity.updateDiceCount();
+                activity.onClickChangeButton(position);
             }
         });
 
