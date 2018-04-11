@@ -2,6 +2,7 @@ package farsight.solutions.tutorial.diceroller;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -10,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.util.Random;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
@@ -23,10 +28,21 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     MainPresenter presenter;
     DiceAdapter diceAdapter;
+    Unbinder unbinder;
+
+    @BindView(R.id.dice_list)
     ListView listView;
+
+    @BindView(R.id.total_count)
     TextView totalCount;
+
+    @BindView(R.id.blank_count)
     TextView blankCount;
+
+    @BindView(R.id.mag_count)
     TextView magCount;
+
+    @BindView(R.id.star_count)
     TextView starCount;
 
     @Override
@@ -34,11 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         //Connecting activity to layout
         setContentView(R.layout.activity_main);
-        listView = findViewById(R.id.dice_list);
-        totalCount = findViewById(R.id.total_count);
-        blankCount = findViewById(R.id.blank_count);
-        magCount = findViewById(R.id.mag_count);
-        starCount = findViewById(R.id.star_count);
+        unbinder = ButterKnife.bind(this);
 
         //Presenter
         presenter = new MainPresenter();
@@ -46,9 +58,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         //Setup ListView and Adapter
         diceAdapter = new DiceAdapter(this, R.layout.dice_row, presenter.getDiceList());
-
-        //Initialize Data
         listView.setAdapter(diceAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     @Override
