@@ -415,6 +415,8 @@ The current 'Roll' button logic goes through all the dice and sets new values fo
     }
     ....
 
-Screenshot
+Screenshot and Video
 =================
-![Screenshot](./images/screenshot03.png)
+![Animation](./images/animation.gif)
+
+![Screen Shot](./images/screenshot03.png)
