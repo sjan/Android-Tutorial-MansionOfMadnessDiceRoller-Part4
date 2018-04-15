@@ -2,14 +2,13 @@ package farsight.solutions.tutorial.diceroller;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.Button;
 import android.widget.TextView;
+
 import java.util.Random;
 
 import butterknife.BindView;
@@ -27,11 +26,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
     Random random = new Random();
 
     MainPresenter presenter;
-    DiceAdapter diceAdapter;
     Unbinder unbinder;
 
-    @BindView(R.id.dice_list)
-    ListView listView;
+    @BindView(R.id.hold_button)
+    Button holdButton;
+
+    @BindView(R.id.change_button)
+    Button changeButton;
 
     @BindView(R.id.total_count)
     TextView totalCount;
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @BindView(R.id.star_count)
     TextView starCount;
 
+    @BindView(R.id.dice_canvas)
+    DiceRollLayout diceRollLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +60,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         presenter = new MainPresenter();
         presenter.setView(this);
 
-        //Setup ListView and Adapter
-        diceAdapter = new DiceAdapter(this, R.layout.dice_row, presenter.getDiceList());
-        listView.setAdapter(diceAdapter);
+        diceRollLayout.setPresenter(presenter);
+
     }
 
     @Override
@@ -70,10 +73,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void rollDice(int diceIndex) {
         //roll all dice that are not being held
-        View diceRowView = listView.getChildAt(diceIndex);
+        View diceView = diceRollLayout.getChildAt(diceIndex);
 
-        if (diceRowView != null) {
-            ImageView diceView = diceRowView.findViewById(R.id.dice_icon);
+        if (diceView != null) {
             int rotation = randomRotation();
             int duration = randomDuration();
 
@@ -92,16 +94,47 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void refreshAdapter() {
-        this.diceAdapter.notifyDataSetChanged();
+    public void refreshDiceLayout() {
+        diceRollLayout.render();
     }
 
-    private int randomDuration() {
-        return ONE_SECOND + random.nextInt(TWO_SECONDS);
+    @Override
+    public void highlightDice(int diceIndex) {
+        DiceView diceView = (DiceView) diceRollLayout.getChildAt(diceIndex);
+        diceView.highlight();
     }
 
-    private int randomRotation() {
-        return FULL_REVOLUTION + random.nextInt(THREE_REVOLUTION);
+    @Override
+    public void unhighlightAllDice() {
+        for(int i=0;i<diceRollLayout.getChildCount();i++) {
+            DiceView diceView = (DiceView) diceRollLayout.getChildAt(i);
+            diceView.unhighlight();
+        }
+    }
+
+    @Override
+    public void disableChangeButton() {
+        changeButton.setEnabled(false);
+    }
+
+    @Override
+    public void enableChangeButton() {
+        changeButton.setEnabled(true);
+    }
+
+    @Override
+    public void enableHoldButton(boolean hold) {
+        holdButton.setEnabled(true);
+        if(hold) {
+            holdButton.setText(R.string.hold_button_unhold_label);
+        } else {
+            holdButton.setText(R.string.hold_button_hold_label);
+        }
+    }
+
+    @Override
+    public void disableHoldButton() {
+        holdButton.setEnabled(false);
     }
 
     @Override
@@ -124,11 +157,19 @@ public class MainActivity extends AppCompatActivity implements MainView {
         presenter.rollButtonClicked();
     }
 
-    public void onClickChangeButton(int diceIndex) {
-        presenter.changeButtonClicked(diceIndex);
+    public void onClickChangeButton(View view) {
+        presenter.changeButtonClicked();
     }
 
-    public void onClickHoldButton(int diceIndex) {
-        presenter.holdButtonClick(diceIndex);
+    public void onClickHoldButton(View view) {
+        presenter.holdButtonClick();
+    }
+
+    private int randomDuration() {
+        return ONE_SECOND + random.nextInt(TWO_SECONDS);
+    }
+
+    private int randomRotation() {
+        return FULL_REVOLUTION + random.nextInt(THREE_REVOLUTION);
     }
 }

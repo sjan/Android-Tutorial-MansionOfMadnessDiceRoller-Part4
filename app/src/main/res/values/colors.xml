@@ -7,4 +7,5 @@
 
     <color name="redDiceColorDark">#b71c1c</color>
     <color name="redDiceColorLight">#FFEBEE</color>
+    <color name="diceSelectionBorderColor">#2196f3</color>
 </resources>

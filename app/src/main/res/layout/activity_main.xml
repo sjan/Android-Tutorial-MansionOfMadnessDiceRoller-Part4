@@ -7,15 +7,43 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ListView
-        android:id="@+id/dice_list"
+    <farsight.solutions.tutorial.diceroller.DiceRollLayout
+        android:id="@+id/dice_canvas"
         android:layout_height="0dp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+
         app:layout_constraintBottom_toTopOf="@id/dice_summary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </ListView>
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    </farsight.solutions.tutorial.diceroller.DiceRollLayout>
+
+    <Button
+        android:id="@+id/hold_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hold"
+        android:onClick="onClickHoldButton"
+        app:layout_constraintBottom_toBottomOf="@id/dice_canvas"
+        app:layout_constraintHorizontal_bias="0.945"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.949" />
+
+    <Button
+        android:id="@+id/change_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change"
+        android:onClick="onClickChangeButton"
+        app:layout_constraintBottom_toBottomOf="@id/dice_canvas"
+        app:layout_constraintHorizontal_bias="0.945"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.799" />
 
     <LinearLayout
         android:id="@+id/dice_summary"
@@ -26,7 +54,7 @@
         app:layout_constraintBottom_toTopOf="@id/button_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dice_list">
+        app:layout_constraintTop_toBottomOf="@id/dice_canvas">
         <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="0dp"

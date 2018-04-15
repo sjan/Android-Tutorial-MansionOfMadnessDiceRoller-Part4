@@ -11,8 +11,8 @@ public class Dice {
 
     public static Random random = new Random();
 
-    boolean hold = false;
-    Face diceVal;
+    public boolean hold = false;
+    public Face diceVal;
 
     Dice() {
         roll();
@@ -20,7 +20,7 @@ public class Dice {
 
     public void roll() {
         int num = random.nextInt(4);
-        if(num == 0) { //25% magify
+        if(num == 0) { //25% magnify
             this.diceVal = Face.MAGNIFY;
         } else {
             //37.5% star, 37.5% blank
