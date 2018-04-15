@@ -25,21 +25,7 @@ public class MainPresenter {
         this.mainView = mainView;
         mainView.disableChangeButton();
         mainView.disableHoldButton();
-        updateUI();
-    }
 
-    public void addButtonClicked() {
-        if(diceList.size()<MAX_DICE_COUNT) {
-            diceList.add(new Dice());
-            updateUI();
-        }
-    }
-
-    public void removeButtonClicked() {
-        if(!diceList.isEmpty()) {
-            diceList.remove(diceList.size() - 1);
-            updateUI();
-        }
     }
 
     public void rollButtonClicked() {
@@ -47,10 +33,27 @@ public class MainPresenter {
             Dice dice = diceList.get(index);
             if(!dice.hold) {
                 dice.roll();
-                mainView.rollDice(index);
+                mainView.spinDice(index);
             }
         }
-        updateUI();
+        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+    }
+
+    public void addButtonClicked() {
+        if(diceList.size()<MAX_DICE_COUNT) {
+            diceList.add(new Dice());
+            mainView.addDiceToView();
+            mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+        }
+    }
+
+    public void removeButtonClicked() {
+        if(!diceList.isEmpty()) {
+            diceList.remove(diceList.size() - 1);
+
+            mainView.removeDiceFromView();
+            mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+        }
     }
 
     public List<Dice> getDiceList() {
@@ -64,6 +67,26 @@ public class MainPresenter {
         mainView.highlightDice(diceIndex);
         mainView.enableChangeButton();
         mainView.enableHoldButton(diceList.get(diceIndex).hold);
+
+        mainView.removeDiceFromView();
+        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+
+    }
+
+    public void changeButtonClicked() {
+        Dice dice = diceList.get(selectIndex);
+        dice.nextValue();
+
+        mainView.flipDiceView(selectIndex);
+        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+    }
+
+    public void holdButtonClick() {
+        Dice dice = diceList.get(selectIndex);
+        dice.toggleHold();
+
+        mainView.holdDiceView(selectIndex);
+        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
     }
 
     public void unselectIndex() {
@@ -72,26 +95,5 @@ public class MainPresenter {
         mainView.unhighlightAllDice();
         mainView.disableChangeButton();
         mainView.disableHoldButton();
-    }
-
-    public void changeButtonClicked() {
-        if(selectIndex!=null) {
-            diceList.get(selectIndex).nextValue();
-            updateUI();
-        }
-    }
-
-    public void holdButtonClick() {
-        if(selectIndex!=null) {
-            Dice dice = diceList.get(selectIndex);
-            dice.toggleHold();
-            mainView.enableHoldButton(dice.hold);
-            updateUI();
-        }
-    }
-
-    private void updateUI() {
-        mainView.refreshDiceLayout();
-        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
     }
 }

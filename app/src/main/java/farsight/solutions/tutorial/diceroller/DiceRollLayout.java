@@ -5,14 +5,26 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.RelativeLayout;
 
 import java.util.List;
+import java.util.Random;
 
 public class DiceRollLayout extends RelativeLayout {
     final static String TAG = DiceRollLayout.class.getName();
 
     MainPresenter presenter;
+
+    private static final int ONE_SECOND = 1000;
+    private static final int TWO_SECONDS = 2000;
+    private static final int FULL_REVOLUTION = 360;
+    private static final int THREE_REVOLUTION = 1080;
+    private static final float CENTER = 0.5f;
+
+    Random random = new Random();
 
     public DiceRollLayout(Context context) {
         super(context);
@@ -135,5 +147,38 @@ public class DiceRollLayout extends RelativeLayout {
     @Override
     public boolean performClick() {
         return super.performClick();
+    }
+
+    public void spinDice(int diceIndex) {
+
+        //roll all dice that are not being held
+        DiceView diceView = (DiceView) this.getChildAt(diceIndex);
+        diceView.refreshDiceFace();
+
+        if (diceView != null) {
+            int rotation = randomRotation();
+            int duration = randomDuration();
+
+            RotateAnimation rotate = new RotateAnimation(
+                    0, rotation,
+                    Animation.RELATIVE_TO_SELF, CENTER,
+                    Animation.RELATIVE_TO_SELF, CENTER
+            );
+            rotate.setFillAfter(true);
+            rotate.setFillEnabled(true);
+            rotate.setDuration(duration);
+            rotate.setInterpolator(new DecelerateInterpolator());
+
+            diceView.startAnimation(rotate);
+        }
+
+    }
+
+    private int randomDuration() {
+        return ONE_SECOND + random.nextInt(TWO_SECONDS);
+    }
+
+    private int randomRotation() {
+        return FULL_REVOLUTION + random.nextInt(THREE_REVOLUTION);
     }
 }

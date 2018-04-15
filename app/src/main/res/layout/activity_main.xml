@@ -6,12 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
     <farsight.solutions.tutorial.diceroller.DiceRollLayout
         android:id="@+id/dice_canvas"
         android:layout_height="0dp"
         android:layout_width="0dp"
-
         app:layout_constraintBottom_toTopOf="@id/dice_summary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -45,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.799" />
 
-    <LinearLayout
+  <LinearLayout
         android:id="@+id/dice_summary"
         android:layout_width="match_parent"
         android:layout_height="@dimen/control_bar_line_height"

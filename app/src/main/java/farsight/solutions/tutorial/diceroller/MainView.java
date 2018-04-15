@@ -2,8 +2,6 @@ package farsight.solutions.tutorial.diceroller;
 
 public interface MainView {
     void updateDiceCount(int totalDice, int blankDice, int magDice, int starDice);
-    void rollDice(int diceIndex);
-    void refreshDiceLayout();
     void highlightDice(int diceIndex);
     void unhighlightAllDice();
 
@@ -12,5 +10,11 @@ public interface MainView {
 
     void disableHoldButton();
     void enableHoldButton(boolean hold);
+
+    void addDiceToView();
+    void removeDiceFromView();
+    void spinDice(int index);
+    void flipDiceView(int diceIndex);
+    void holdDiceView(int diceIndex);
 
 }
