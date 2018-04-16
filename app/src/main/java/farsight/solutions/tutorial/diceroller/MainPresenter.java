@@ -9,12 +9,11 @@ public class MainPresenter {
 
     private List<Dice> diceList = new ArrayList<>();
     private MainView mainView;
-    private Integer selectIndex = null;
 
     private int countDice(Dice.Face type) {
-        int count =0;
-        for(Dice dice : diceList) {
-            if(dice.diceVal == type) {
+        int count = 0;
+        for (Dice dice : diceList) {
+            if (dice.diceVal == type) {
                 count++;
             }
         }
@@ -23,36 +22,39 @@ public class MainPresenter {
 
     public void setView(MainView mainView) {
         this.mainView = mainView;
-        mainView.disableChangeButton();
-        mainView.disableHoldButton();
+        diceList.add(new Dice());
 
+        mainView.addDiceToView();
+        updateDiceCount();
     }
 
     public void rollButtonClicked() {
-        for(int index=0;index<diceList.size();index++) {
+        for (int index = 0; index < diceList.size(); index++) {
             Dice dice = diceList.get(index);
-            if(!dice.hold) {
+            if (!dice.hold) {
                 dice.roll();
                 mainView.spinDice(index);
             }
         }
-        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+
+        updateDiceCount();
     }
 
     public void addButtonClicked() {
-        if(diceList.size()<MAX_DICE_COUNT) {
+        if (diceList.size() < MAX_DICE_COUNT) {
             diceList.add(new Dice());
+
             mainView.addDiceToView();
-            mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+            updateDiceCount();
         }
     }
 
     public void removeButtonClicked() {
-        if(!diceList.isEmpty()) {
+        if (!diceList.isEmpty()) {
             diceList.remove(diceList.size() - 1);
 
             mainView.removeDiceFromView();
-            mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+            updateDiceCount();
         }
     }
 
@@ -60,40 +62,48 @@ public class MainPresenter {
         return diceList;
     }
 
-    public void selectIndex(int diceIndex) {
-        selectIndex = diceIndex;
+    public void diceInHoldZone(int index) {
+        Dice dice = diceList.get(index);
+        dice.hold = true;
 
-        mainView.unhighlightAllDice();
-        mainView.highlightDice(diceIndex);
-        mainView.enableChangeButton();
-        mainView.enableHoldButton(diceList.get(diceIndex).hold);
-
-        mainView.removeDiceFromView();
-        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
-
+        mainView.holdDiceView(index);
+        updateDiceCount();
     }
 
-    public void changeButtonClicked() {
-        Dice dice = diceList.get(selectIndex);
-        dice.nextValue();
+    public void diceNotInHoldZone(int index) {
+        Dice dice = diceList.get(index);
+        dice.hold = false;
 
-        mainView.flipDiceView(selectIndex);
-        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+        mainView.holdDiceView(index);
+        updateDiceCount();
     }
 
-    public void holdButtonClick() {
-        Dice dice = diceList.get(selectIndex);
-        dice.toggleHold();
+    public void diceInBlankZone(int index) {
+        Dice dice = diceList.get(index);
+        dice.diceVal = Dice.Face.BLANK;
 
-        mainView.holdDiceView(selectIndex);
-        mainView.updateDiceCount(diceList.size(), countDice(Dice.Face.BLANK), countDice(Dice.Face.MAGNIFY), countDice(Dice.Face.STAR));
+        updateDiceCount();
     }
 
-    public void unselectIndex() {
-        selectIndex = null;
+    public void diceInMagZone(int index) {
+        Dice dice = diceList.get(index);
+        dice.diceVal = Dice.Face.MAGNIFY;
 
-        mainView.unhighlightAllDice();
-        mainView.disableChangeButton();
-        mainView.disableHoldButton();
+        updateDiceCount();
+    }
+
+    public void diceInStarZone(int index) {
+        Dice dice = diceList.get(index);
+        dice.diceVal = Dice.Face.STAR;
+
+        updateDiceCount();
+    }
+
+    private void updateDiceCount() {
+        mainView.updateDiceCount(
+                diceList.size(),
+                countDice(Dice.Face.BLANK),
+                countDice(Dice.Face.MAGNIFY),
+                countDice(Dice.Face.STAR));
     }
 }

@@ -56,15 +56,6 @@ public class DiceView extends CircleImageView {
         return super.performClick();
     }
 
-    public void highlight() {
-        this.setBorderWidth(6);
-
-    }
-
-    public void unhighlight() {
-        this.setBorderWidth(0);
-    }
-
     public void setDice(Dice dice) {
         this.dice = dice;
     }

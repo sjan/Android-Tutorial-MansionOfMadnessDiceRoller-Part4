@@ -3,7 +3,6 @@ package farsight.solutions.tutorial.diceroller;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -15,12 +14,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private static final String TAG = MainActivity.class.getName();
     MainPresenter presenter;
     Unbinder unbinder;
-
-    @BindView(R.id.hold_button)
-    Button holdButton;
-
-    @BindView(R.id.change_button)
-    Button changeButton;
 
     @BindView(R.id.total_count)
     TextView totalCount;
@@ -44,57 +37,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
         unbinder = ButterKnife.bind(this);
 
-        //Presenter
-        presenter = new MainPresenter();
-        presenter.setView(this);
-
-        // specify an adapter (see also next example)
-        diceRollLayout.setPresenter(presenter);
+        //Presenter Binding
+        bindPresenter(new MainPresenter());
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-    }
-
-    @Override
-    public void highlightDice(int diceIndex) {
-        DiceView diceView = (DiceView) diceRollLayout.getChildAt(diceIndex);
-        diceView.highlight();
-    }
-
-    @Override
-    public void unhighlightAllDice() {
-        for (int i = 0; i < diceRollLayout.getChildCount(); i++) {
-            DiceView diceView = (DiceView) diceRollLayout.getChildAt(i);
-            diceView.unhighlight();
-        }
-    }
-
-    @Override
-    public void disableChangeButton() {
-        changeButton.setEnabled(false);
-    }
-
-    @Override
-    public void enableChangeButton() {
-        changeButton.setEnabled(true);
-    }
-
-    @Override
-    public void enableHoldButton(boolean hold) {
-        holdButton.setEnabled(true);
-        if (hold) {
-            holdButton.setText(R.string.hold_button_unhold_label);
-        } else {
-            holdButton.setText(R.string.hold_button_hold_label);
-        }
-    }
-
-    @Override
-    public void disableHoldButton() {
-        holdButton.setEnabled(false);
     }
 
     @Override
@@ -110,11 +60,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void spinDice(int diceIndex) {
         diceRollLayout.spinDice(diceIndex);
-    }
-
-    @Override
-    public void flipDiceView(int diceIndex) {
-        diceRollLayout.render();
     }
 
     @Override
@@ -142,11 +87,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         presenter.rollButtonClicked();
     }
 
-    public void onClickHoldButton(View view) {
-        presenter.holdButtonClick();
-    }
-
-    public void onClickChangeButton(View view) {
-        presenter.changeButtonClicked();
+    private void bindPresenter(MainPresenter mainPresenter) {
+        presenter = mainPresenter;
+        diceRollLayout.setPresenter(presenter);
+        presenter.setView(this);
     }
 }

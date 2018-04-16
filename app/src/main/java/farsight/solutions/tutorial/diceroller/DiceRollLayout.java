@@ -1,7 +1,6 @@
 package farsight.solutions.tutorial.diceroller;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +41,12 @@ public class DiceRollLayout extends RelativeLayout {
         this.presenter = presenter;
     }
 
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
+
     public void render() {
         //count check
         if(presenter!=null) {
@@ -59,7 +64,7 @@ public class DiceRollLayout extends RelativeLayout {
                 final int index = getChildCount();
 
                 //initial layout parameters
-                DiceRollLayout.LayoutParams layoutParams = new DiceRollLayout.LayoutParams(
+                final DiceRollLayout.LayoutParams layoutParams = new DiceRollLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT
                 );
@@ -73,9 +78,6 @@ public class DiceRollLayout extends RelativeLayout {
 
                 diceView.setDice(diceList.get(index));
                 diceView.setLayoutParams(layoutParams);
-                diceView.setBorderColor(ContextCompat.getColor(getContext(), R.color.diceSelectionBorderColor));
-                diceView.setBorderOverlay(true);
-                diceView.setBorderWidth(0);
 
                 //touch drag listener
                 diceView.setOnTouchListener(new View.OnTouchListener() {
@@ -84,6 +86,7 @@ public class DiceRollLayout extends RelativeLayout {
 
                     @Override
                     public boolean onTouch(View view, MotionEvent event) {
+
                         switch(event.getAction())
                         {
                             case MotionEvent.ACTION_DOWN :
@@ -97,14 +100,25 @@ public class DiceRollLayout extends RelativeLayout {
                             {
                                 x = event.getRawX();
                                 y = event.getRawY();
-                                parms.leftMargin = (int) (x-dx);
-                                parms.topMargin = (int) (y-dy);
+
+                                parms.leftMargin = boundifyX(x-dx);
+                                parms.topMargin = boundifyY(y-dy);
+
+                                if(inHoldZone(parms)) {
+                                    presenter.diceInHoldZone(index);
+
+                                    if(diceInLeftFlipZone(parms)) {
+                                        presenter.diceInBlankZone(index);
+                                    } else if(diceInRightFlipZone(parms)) {
+                                        presenter.diceInMagZone(index);
+                                    } else if(diceInCenterFlipZone(parms)) {
+                                        presenter.diceInStarZone(index);
+                                    }
+                                } else {
+                                    presenter.diceNotInHoldZone(index);
+                                }
+
                                 view.setLayoutParams(parms);
-                            }
-                            break;
-                            case MotionEvent.ACTION_UP :
-                            {
-                                presenter.selectIndex(index);
                             }
                             break;
                         }
@@ -121,32 +135,6 @@ public class DiceRollLayout extends RelativeLayout {
                 diceView.refreshDiceFace();
             }
         }
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        if(presenter!=null) {
-            this.setOnTouchListener(new OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_UP: {
-                            presenter.unselectIndex();
-                        }
-                        break;
-                    }
-                    return true;
-                }
-            });
-        }
-    }
-
-
-    @Override
-    public boolean performClick() {
-        return super.performClick();
     }
 
     public void spinDice(int diceIndex) {
@@ -180,5 +168,79 @@ public class DiceRollLayout extends RelativeLayout {
 
     private int randomRotation() {
         return FULL_REVOLUTION + random.nextInt(THREE_REVOLUTION);
+    }
+
+    private boolean inHoldZone(RelativeLayout.LayoutParams param) {
+        int holdAreaHeight =
+            getResources().getDimensionPixelSize(R.dimen.hold_area_height) +
+                getResources().getDimensionPixelSize(R.dimen.change_area_height);
+        if(param.topMargin > (getHeight() - holdAreaHeight)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean diceInLeftFlipZone(RelativeLayout.LayoutParams param) {
+        int changeAreaHeight  =
+                getResources().getDimensionPixelSize(R.dimen.change_area_height);
+        int changeAreaWidth = getWidth()/3;
+
+        int diceCenterLeft =
+                param.leftMargin + getResources().getDimensionPixelSize(R.dimen.dice_size)/2;
+        int diceCenterTop =
+                param.topMargin + getResources().getDimensionPixelSize(R.dimen.dice_size)/2;
+
+        if(diceCenterTop > (getHeight() - changeAreaHeight )&&
+                diceCenterLeft < changeAreaWidth) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean diceInCenterFlipZone(RelativeLayout.LayoutParams param) {
+        int changeAreaHeight  =
+            getResources().getDimensionPixelSize(R.dimen.change_area_height);
+        int changeAreaWidth = getWidth()/3;
+
+        int diceCenterLeft =
+                param.leftMargin + getResources().getDimensionPixelSize(R.dimen.dice_size)/2;
+        int diceCenterTop =
+                param.topMargin + getResources().getDimensionPixelSize(R.dimen.dice_size)/2;
+
+        if(diceCenterTop > (getHeight() - changeAreaHeight )&&
+            diceCenterLeft > changeAreaWidth &&
+            diceCenterLeft < changeAreaWidth*2) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean diceInRightFlipZone(RelativeLayout.LayoutParams param) {
+        int changeAreaHeight  =
+                getResources().getDimensionPixelSize(R.dimen.change_area_height);
+        int changeAreaWidth = getWidth()/3;
+
+        int diceCenterLeft =
+                param.leftMargin + getResources().getDimensionPixelSize(R.dimen.dice_size)/2;
+        int diceCenterTop =
+                param.topMargin + getResources().getDimensionPixelSize(R.dimen.dice_size)/2;
+
+        if(diceCenterTop > (getHeight() - changeAreaHeight )&&
+                diceCenterLeft > changeAreaWidth*2) {
+            return true;
+        }
+        return false;
+    }
+
+    private int boundifyX(float left) {
+        return Math.min(
+                Math.max(0, (int)left),
+                getWidth()-getResources().getDimensionPixelSize(R.dimen.dice_size));
+    }
+
+    private int boundifyY(float top) {
+        return Math.min(
+                Math.max(0, (int)top),
+                getHeight()-getResources().getDimensionPixelSize(R.dimen.dice_size));
     }
 }
