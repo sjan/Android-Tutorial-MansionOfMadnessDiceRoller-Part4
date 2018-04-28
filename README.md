@@ -21,8 +21,8 @@ Contents
 --------
 * Proposal
 * Model View Presenter Architecture
-* Draggable Dice X/Y based dice positions using ````RelativeLayout````
-* Hold and Change
+* Touch Draggable Views
+* Hold and Change Button redesign
     * Selectable Dice
     * Change and Hold Buttons
 
@@ -65,7 +65,7 @@ Instead of jumping into the code and rewriting ````MainActivity````, I'm first g
       * Coordinates UI changes and Model changes.
       * This is where the tire meets the road. The Presenter translates the UI events into model changes and translates model changes into UI events.
 
-![MVP](./images/Model_View_Presenter_GUI_Design_Pattern.png)
+![MVP](./images/part3_Model_View_Presenter_GUI_Design_Pattern.png)
 
 ###### *Image By Google - http://www.gwtproject.org/articles/testing_methodologies_using_gwt.html, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=34271902* ######
 
