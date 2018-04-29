@@ -7,4 +7,6 @@
     <string name="roll_button_label">ROLL</string>
     <string name="change_button_label">CHANGE</string>
     <string name="total_label">Total:</string>
+    <string name="hold_area_label">Hold Area</string>
+    <string name="change_area_label">Flip Area</string>
 </resources>
