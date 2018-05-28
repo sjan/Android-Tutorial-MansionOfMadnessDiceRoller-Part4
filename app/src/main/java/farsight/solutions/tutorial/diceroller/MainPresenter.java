@@ -67,11 +67,9 @@ public class MainPresenter {
 
         switch(type) {
             case HOLD:
-                mainView.redrawDice(diceList);
                 dice.setHold(true);
                 break;
             case ROLL:
-                mainView.redrawDice(diceList);
                 dice.setHold(false);
                 break;
             case SWITCH_MAGNIFY:
@@ -84,6 +82,7 @@ public class MainPresenter {
                 dice.diceVal = Dice.Face.STAR;
                 break;
         }
+        mainView.redrawDice(diceList);
         updateDiceCount();
 
     }
