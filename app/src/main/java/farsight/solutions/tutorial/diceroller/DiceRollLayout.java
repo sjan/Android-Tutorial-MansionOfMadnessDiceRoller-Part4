@@ -13,9 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 public class DiceRollLayout extends RelativeLayout {
-    final static String TAG = DiceRollLayout.class.getName();
-
-    MainPresenter presenter;
+    private MainPresenter presenter;
 
     private static final int ONE_SECOND = 1000;
     private static final int TWO_SECONDS = 2000;
