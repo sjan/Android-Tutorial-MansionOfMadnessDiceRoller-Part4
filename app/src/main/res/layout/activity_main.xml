@@ -11,14 +11,14 @@
         android:id="@+id/hold_area"
         android:layout_width="match_parent"
         android:layout_height="@dimen/hold_area_height"
-        android:background="@color/colorAccent"
+        android:background="@color/holdAreaColor"
         app:layout_constraintBottom_toTopOf="@+id/change_area"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/holdAreaTextColor"
             android:layout_gravity="center"
             android:textSize="20sp"
             android:text="@string/hold_area_label"/>
@@ -28,7 +28,6 @@
         android:id="@+id/change_area"
         android:layout_width="match_parent"
         android:layout_height="@dimen/hold_area_height"
-        android:background="@color/colorPrimary"
         android:orientation="horizontal"
         android:weightSum="3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,45 +35,45 @@
         app:layout_constraintRight_toRightOf="parent">
         <FrameLayout
             android:id="@+id/star_change_area"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/starAreaColor"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/starAreaTextColor"
             android:layout_gravity="center"
             android:textSize="20sp"
             android:text="Blank"/>
         </FrameLayout>
         <FrameLayout
             android:id="@+id/mag_change_area"
-            android:background="@color/redDiceColorDark"
+            android:background="@color/magAreaColor"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/magAreaTextColor"
             android:layout_gravity="center"
             android:textSize="20sp"
-            android:text="Magnify"/>
+            android:text="Star"/>
         </FrameLayout>
         <FrameLayout
             android:id="@+id/blank_change_area"
-            android:background="@color/redDiceColorLight"
+            android:background="@color/blankAreaColor"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
+                android:textColor="@color/blankAreaTextColor"
                 android:layout_gravity="center"
                 android:textSize="20sp"
-                android:text="Star"/>
+                android:text="Magnify"/>
 
         </FrameLayout>
 
@@ -187,7 +186,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"></farsight.solutions.tutorial.diceroller.DiceRollLayout>
+        app:layout_constraintVertical_bias="1.0"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_dice_button"

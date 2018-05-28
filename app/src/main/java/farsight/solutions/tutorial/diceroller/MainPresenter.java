@@ -24,7 +24,7 @@ public class MainPresenter {
         this.mainView = mainView;
         diceList.add(new Dice());
 
-        mainView.addDiceToView();
+        mainView.redrawDice(diceList);
         updateDiceCount();
     }
 
@@ -44,7 +44,7 @@ public class MainPresenter {
         if (diceList.size() < MAX_DICE_COUNT) {
             diceList.add(new Dice());
 
-            mainView.addDiceToView();
+            mainView.redrawDice(diceList);
             updateDiceCount();
         }
     }
@@ -53,7 +53,7 @@ public class MainPresenter {
         if (!diceList.isEmpty()) {
             diceList.remove(diceList.size() - 1);
 
-            mainView.removeDiceFromView();
+            mainView.redrawDice(diceList);
             updateDiceCount();
         }
     }
@@ -62,41 +62,30 @@ public class MainPresenter {
         return diceList;
     }
 
-    public void diceInHoldZone(int index) {
+    public void diceInZone(int index, Zone type) {
         Dice dice = diceList.get(index);
-        dice.hold = true;
 
-        mainView.holdDiceView(index);
+        switch(type) {
+            case HOLD:
+                mainView.redrawDice(diceList);
+                dice.setHold(true);
+                break;
+            case ROLL:
+                mainView.redrawDice(diceList);
+                dice.setHold(false);
+                break;
+            case SWITCH_MAGNIFY:
+                dice.diceVal = Dice.Face.MAGNIFY;
+                break;
+            case SWITCH_BLANK:
+                dice.diceVal = Dice.Face.BLANK;
+                break;
+            case SWITCH_STAR:
+                dice.diceVal = Dice.Face.STAR;
+                break;
+        }
         updateDiceCount();
-    }
 
-    public void diceNotInHoldZone(int index) {
-        Dice dice = diceList.get(index);
-        dice.hold = false;
-
-        mainView.holdDiceView(index);
-        updateDiceCount();
-    }
-
-    public void diceInBlankZone(int index) {
-        Dice dice = diceList.get(index);
-        dice.diceVal = Dice.Face.BLANK;
-
-        updateDiceCount();
-    }
-
-    public void diceInMagZone(int index) {
-        Dice dice = diceList.get(index);
-        dice.diceVal = Dice.Face.MAGNIFY;
-
-        updateDiceCount();
-    }
-
-    public void diceInStarZone(int index) {
-        Dice dice = diceList.get(index);
-        dice.diceVal = Dice.Face.STAR;
-
-        updateDiceCount();
     }
 
     private void updateDiceCount() {

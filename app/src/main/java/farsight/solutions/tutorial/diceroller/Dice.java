@@ -11,7 +11,7 @@ public class Dice {
 
     public static Random random = new Random();
 
-    public boolean hold = false;
+    public boolean hold;
     public Face diceVal;
 
     Dice() {
@@ -32,13 +32,8 @@ public class Dice {
         }
     }
 
-    public void toggleHold() {
-        hold = !hold;
+    public void setHold(Boolean hold) {
+        this.hold = hold;
     }
 
-    public void nextValue() {
-        int index = diceVal.ordinal();
-        index = (index+1) % Face.values().length;
-        diceVal = Face.values()[index];
-    }
 }

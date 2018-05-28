@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -48,23 +50,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void addDiceToView() {
-        diceRollLayout.render();
-    }
-
-    @Override
-    public void removeDiceFromView() {
-        diceRollLayout.render();
+    public void redrawDice(List<Dice> list) {
+        diceRollLayout.render(list);
     }
 
     @Override
     public void spinDice(int diceIndex) {
         diceRollLayout.spinDice(diceIndex);
-    }
-
-    @Override
-    public void holdDiceView(int diceIndex) {
-        diceRollLayout.render();
     }
 
     @Override

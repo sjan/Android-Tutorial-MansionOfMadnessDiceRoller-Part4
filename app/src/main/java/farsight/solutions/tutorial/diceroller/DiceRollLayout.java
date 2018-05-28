@@ -47,11 +47,9 @@ public class DiceRollLayout extends RelativeLayout {
         return super.performClick();
     }
 
-    public void render() {
+    public void render(List<Dice> diceList) {
         //count check
         if(presenter!=null) {
-            List<Dice> diceList = presenter.getDiceList();
-
             int diceCount = diceList.size();
 
             //remove dice
@@ -105,17 +103,17 @@ public class DiceRollLayout extends RelativeLayout {
                                 parms.topMargin = boundifyY(y-dy);
 
                                 if(inHoldZone(parms)) {
-                                    presenter.diceInHoldZone(index);
+                                    presenter.diceInZone(index, Zone.HOLD);
 
                                     if(diceInLeftFlipZone(parms)) {
-                                        presenter.diceInBlankZone(index);
+                                        presenter.diceInZone(index, Zone.SWITCH_BLANK);
                                     } else if(diceInRightFlipZone(parms)) {
-                                        presenter.diceInMagZone(index);
+                                        presenter.diceInZone(index, Zone.SWITCH_MAGNIFY);
                                     } else if(diceInCenterFlipZone(parms)) {
-                                        presenter.diceInStarZone(index);
+                                        presenter.diceInZone(index, Zone.SWITCH_STAR);
                                     }
                                 } else {
-                                    presenter.diceNotInHoldZone(index);
+                                    presenter.diceInZone(index, Zone.ROLL);
                                 }
 
                                 view.setLayoutParams(parms);

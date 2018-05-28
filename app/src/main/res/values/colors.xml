@@ -8,4 +8,18 @@
     <color name="redDiceColorDark">#b71c1c</color>
     <color name="redDiceColorLight">#FFEBEE</color>
     <color name="diceSelectionBorderColor">#2196f3</color>
+
+    <color name="holdAreaColor">#8b8a8a</color>
+    <color name="holdAreaTextColor">#232121</color>
+
+    <color name="starAreaColor">#F3f3f3</color>
+    <color name="starAreaTextColor">#4b4b4b</color>
+
+
+    <color name="blankAreaColor">#212121</color>
+    <color name="blankAreaTextColor">#d4a8a8</color>
+
+    <color name="magAreaColor">#dadada</color>
+    <color name="magAreaTextColor">#331919</color>
+
 </resources>
